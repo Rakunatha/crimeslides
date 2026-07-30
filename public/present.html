@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b0c10">
+<title>9 Contrarian Notions on the Law of Crimes in India</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000000;
+  --panel:#111111;
+  --panel2:#1a1a1a;
+  --ink:#ffffff;
+  --muted:#8a8a8a;
+  --line:rgba(255,255,255,0.16);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%; overscroll-behavior:none;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  touch-action:manipulation;
+  overscroll-behavior:none;
+}
+.deck{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  height:100dvh;
+  touch-action:pan-y;
+}
+.slide{
+  position:absolute;
+  inset:0;
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:6vh 6vw;
+  padding:max(4vh, env(safe-area-inset-top)) max(6vw, env(safe-area-inset-right)) max(6vh, env(safe-area-inset-bottom)) max(6vw, env(safe-area-inset-left));
+  text-align:center;
+  animation:rise .6s ease both;
+  overflow-y:auto;
+}
+@media (prefers-reduced-motion: reduce){
+  .slide{animation:none;}
+}
+.slide.active{display:flex;}
+@keyframes rise{
+  from{opacity:0; transform:translateY(18px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* ---------- Staggered entrance choreography for slide text ---------- */
+@keyframes revealUp{
+  from{opacity:0; transform:translateY(16px);}
+  to{opacity:1; transform:translateY(0);}
+}
+.slide.active .eyebrow{animation:revealUp .5s cubic-bezier(.2,.7,.2,1) .04s both;}
+.slide.active .title{animation:revealUp .6s cubic-bezier(.2,.7,.2,1) .13s both;}
+.slide.active .sub{animation:revealUp .55s cubic-bezier(.2,.7,.2,1) .26s both;}
+.slide.active .scene{animation:revealUp .6s cubic-bezier(.2,.7,.2,1) .34s both;}
+.slide.active .takeaway{animation:revealUp .55s cubic-bezier(.2,.7,.2,1) .5s both;}
+
+/* ---------- SVG figure & prop entrance (pop + settle) ---------- */
+@keyframes popIn{
+  0%{opacity:0; transform:translateY(14px) scale(.82);}
+  70%{opacity:1; transform:translateY(-2px) scale(1.03);}
+  100%{opacity:1; transform:translateY(0) scale(1);}
+}
+.enter{animation:popIn .6s cubic-bezier(.22,.9,.32,1.1) both;}
+
+/* ---------- Idle / ambient loops — the "alive" layer ---------- */
+@keyframes bob{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-5px);}
+}
+.idle-bob{animation:bob 2.6s ease-in-out infinite;}
+.idle-bob-slow{animation:bob 3.6s ease-in-out infinite;}
+
+@keyframes shockBob{
+  0%,100%{transform:translateY(0) rotate(0deg);}
+  25%{transform:translateY(-3px) rotate(-2deg);}
+  75%{transform:translateY(-1px) rotate(2deg);}
+}
+.idle-shock{animation:shockBob 1.1s ease-in-out infinite;}
+
+@keyframes camScan{
+  0%,100%{transform:rotate(-9deg);}
+  50%{transform:rotate(9deg);}
+}
+.idle-scan{animation:camScan 3.4s ease-in-out infinite; transform-origin:0px 1px;}
+
+@keyframes swing{
+  0%,100%{transform:rotate(-6deg);}
+  50%{transform:rotate(6deg);}
+}
+.idle-swing{animation:swing 2.8s ease-in-out infinite; transform-origin:0px 0px;}
+.idle-swing-door{animation:swing 4.5s ease-in-out infinite; transform-origin:-24px 0px;}
+
+@keyframes tilt{
+  0%,100%{transform:rotate(-5deg);}
+  50%{transform:rotate(5deg);}
+}
+.idle-tilt{animation:tilt 3.2s ease-in-out infinite; transform-origin:0px -30px;}
+
+@keyframes shake{
+  0%,100%{transform:rotate(0deg) translateX(0);}
+  25%{transform:rotate(-3deg) translateX(-1px);}
+  75%{transform:rotate(3deg) translateX(1px);}
+}
+.idle-shake{animation:shake .85s ease-in-out infinite;}
+
+@keyframes tick{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+.idle-tick{animation:tick 14s linear infinite; transform-origin:0px 0px;}
+
+@keyframes flicker{
+  0%,100%{opacity:.9;}
+  45%{opacity:.55;}
+  55%{opacity:.85;}
+}
+.idle-flicker{animation:flicker 3.2s ease-in-out infinite;}
+
+@keyframes blink{
+  0%,100%{opacity:1;}
+  50%{opacity:.15;}
+}
+.idle-blink{animation:blink 1s steps(1) infinite;}
+.idle-blink-b{animation:blink 1s steps(1) infinite .3s;}
+
+@keyframes pulse{
+  0%,100%{opacity:.45; transform:scale(1);}
+  50%{opacity:1; transform:scale(1.06);}
+}
+.idle-pulse{animation:pulse 2.1s ease-in-out infinite; transform-origin:center;}
+
+@keyframes twinkle{
+  0%,100%{opacity:0; transform:scale(.4);}
+  50%{opacity:1; transform:scale(1);}
+}
+.idle-twinkle{animation:twinkle 1.6s ease-in-out infinite;}
+
+@keyframes growUp{
+  from{transform:scaleY(0); opacity:0;}
+  to{transform:scaleY(1); opacity:1;}
+}
+.grow-up{animation:growUp .8s cubic-bezier(.2,.8,.25,1) both; transform-origin:center bottom;}
+
+@keyframes fillBar{
+  from{transform:scaleX(0);}
+  to{transform:scaleX(1);}
+}
+.fill-bar{animation:fillBar 1.4s cubic-bezier(.2,.7,.2,1) .5s both; transform-origin:left center;}
+
+@keyframes dashDrift{
+  to{stroke-dashoffset:-24;}
+}
+.idle-drift{animation:dashDrift 1.8s linear infinite;}
+
+@media (prefers-reduced-motion: reduce){
+  .enter,.idle-bob,.idle-bob-slow,.idle-shock,.idle-scan,.idle-swing,.idle-swing-door,
+  .idle-tilt,.idle-shake,.idle-tick,.idle-flicker,.idle-blink,.idle-blink-b,.idle-pulse,
+  .idle-twinkle,.grow-up,.fill-bar,.idle-drift{animation:none !important;}
+  .slide.active .eyebrow,.slide.active .title,.slide.active .sub,.slide.active .scene,.slide.active .takeaway{animation:none !important;}
+}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:18px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--muted);}
+h1.title{
+  font-family:'Fraunces',serif;
+  font-weight:700;
+  font-size:clamp(30px,5.4vw,74px);
+  line-height:1.05;
+  margin:0 0 14px 0;
+  max-width:18ch;
+}
+.sub{
+  font-family:'Inter',sans-serif;
+  font-weight:500;
+  font-size:clamp(16px,2.2vw,24px);
+  line-height:1.4;
+  color:var(--muted);
+  margin:0;
+  max-width:32ch;
+}
+.scene{
+  margin:clamp(14px,3vh,28px) 0;
+  height:clamp(140px, 32vh, 320px);
+  width:100%;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:6vw;
+}
+.scene svg{height:100%; max-width:92vw; overflow:visible;}
+.takeaway{
+  margin-top:26px;
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-weight:600;
+  font-size:clamp(17px,2vw,26px);
+  color:var(--ink);
+  border-top:1px solid var(--line);
+  padding-top:18px;
+  max-width:34ch;
+}
+.stamp{
+  position:fixed;
+  bottom:calc(22px + env(safe-area-inset-bottom));
+  left:calc(24px + env(safe-area-inset-left));
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:.08em;
+  color:var(--muted);
+  border:1px solid var(--line);
+  padding:6px 10px;
+  border-radius:3px;
+  transform:rotate(-2deg);
+  opacity:.85;
+  z-index:20;
+  background:rgba(20,22,29,0.6);
+  backdrop-filter:blur(4px);
+}
+.progress{
+  position:fixed;
+  top:0; left:0; right:0;
+  height:3px;
+  background:transparent;
+  z-index:30;
+}
+.progress-bar{
+  height:100%;
+  background:var(--ink);
+  width:0%;
+  transition:width .4s ease;
+}
+.nav{
+  position:fixed;
+  bottom:calc(20px + env(safe-area-inset-bottom));
+  right:calc(24px + env(safe-area-inset-right));
+  display:flex;
+  gap:10px;
+  z-index:30;
+}
+.nav button{
+  width:48px;height:48px;
+  border-radius:50%;
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:var(--ink);
+  font-size:20px;
+  cursor:pointer;
+  transition:.2s;
+  touch-action:manipulation;
+}
+.nav button:hover{background:var(--panel2); border-color:var(--ink);}
+.nav button:active{transform:scale(.92);}
+.nav button:focus-visible{outline:2px solid var(--ink); outline-offset:2px;}
+.counter{
+  position:fixed;
+  top:calc(16px + env(safe-area-inset-top));
+  right:calc(24px + env(safe-area-inset-right));
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  color:var(--muted);
+  z-index:30;
+  background:rgba(20,22,29,0.5);
+  padding:4px 8px;
+  border-radius:10px;
+  backdrop-filter:blur(4px);
+}
+.fs-btn{
+  position:fixed;
+  top:calc(16px + env(safe-area-inset-top));
+  left:50%;
+  transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  color:var(--muted);
+  background:var(--panel);
+  border:1px solid var(--line);
+  padding:10px 14px;
+  border-radius:20px;
+  cursor:pointer;
+  z-index:30;
+  touch-action:manipulation;
+  min-height:40px;
+}
+.fs-btn:hover{color:var(--ink); border-color:var(--ink);}
+.poll{
+  display:flex;
+  gap:16px;
+  margin-top:24px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.poll button{
+  font-family:'Inter',sans-serif;
+  font-size:15px;
+  font-weight:600;
+  padding:14px 22px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:var(--panel2);
+  color:var(--ink);
+  cursor:pointer;
+  transition:.2s;
+  min-width:160px;
+}
+.poll button:hover{border-color:var(--ink);}
+.poll button.voted{border-color:var(--ink); background:rgba(242,183,5,0.08);}
+.poll-bar{
+  height:8px;border-radius:4px;background:var(--line);
+  margin-top:8px;overflow:hidden;
+}
+.poll-bar-fill{height:100%;background:var(--ink);width:0%;transition:width .5s ease;}
+.poll-result{font-size:12px;color:var(--muted);margin-top:6px;font-family:'JetBrains Mono',monospace;}
+kbd{
+  font-family:'JetBrains Mono',monospace;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:1px 6px;
+  font-size:12px;
+}
+.hint{
+  position:fixed;
+  bottom:calc(22px + env(safe-area-inset-bottom));
+  left:50%; transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted);
+  z-index:25;
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+/* ---------- Phones (portrait) ---------- */
+@media (max-width:600px){
+  .eyebrow{font-size:11px; margin-bottom:12px;}
+  .title{font-size:clamp(24px,7vw,38px)!important;}
+  .takeaway{font-size:clamp(15px,4vw,20px); margin-top:16px; padding-top:14px;}
+  .scene{height:clamp(120px,26vh,220px); margin:14px 0;}
+  .stamp{display:none;}
+  .hint{display:none;}
+  .counter{font-size:10px; padding:3px 7px;}
+  .fs-btn{display:none;}
+  .nav button{width:52px;height:52px;font-size:22px;}
+}
+
+/* ---------- Tablets / iPads (portrait & landscape) ---------- */
+@media (min-width:601px) and (max-width:1180px){
+  .scene{height:clamp(160px,30vh,280px);}
+}
+
+/* ---------- Short / landscape phones (limited height) ---------- */
+@media (max-height:480px) and (orientation:landscape){
+  .slide{padding-top:8px; padding-bottom:8px;}
+  .eyebrow{margin-bottom:6px;}
+  .title{font-size:clamp(20px,4.5vw,32px)!important; margin-bottom:6px;}
+  .scene{height:clamp(90px,44vh,160px); margin:8px 0;}
+  .takeaway{margin-top:8px; padding-top:8px; font-size:clamp(13px,2.2vw,18px);}
+  .stamp,.hint{display:none;}
+  .counter,.fs-btn{padding:5px 10px; font-size:10px; min-height:0;}
+  .nav button{width:38px;height:38px;font-size:16px;}
+}
+
+/* ---------- Large displays / smart boards / projectors ---------- */
+@media (min-width:1600px){
+  .title{font-size:clamp(40px,4.6vw,96px)!important;}
+  .scene{height:clamp(220px,36vh,420px);}
+  .takeaway{font-size:clamp(22px,1.8vw,32px);}
+  .nav button{width:56px;height:56px;font-size:24px;}
+}
+
+/* ---------- Coarse pointer (touch) devices: bigger hit areas ---------- */
+@media (pointer:coarse){
+  .nav button{width:52px;height:52px;}
+  .fs-btn{padding:11px 16px;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+<div class="counter" id="counter">01 / 01</div>
+<button class="fs-btn" id="fsBtn">⤢ fullscreen (F)</button>
+<div class="stamp" id="stamp">9 CONTRARIAN NOTIONS<br>ON LAW OF CRIMES</div>
+<div class="hint">← → space to advance · click a slide anywhere · swipe on touch</div>
+
+<div class="deck" id="deck"></div>
+
+<div class="nav">
+  <button id="prevBtn" aria-label="Previous">‹</button>
+  <button id="nextBtn" aria-label="Next">›</button>
+</div>
+
+<script>
+/* ---------------------------------------------------------
+   STICK-FIGURE PRIMITIVES
+   One consistent little cast, reused and recomposed throughout.
+   Every primitive is wrapped in two animation layers:
+     "enter"  - a one-shot pop-in when the slide becomes active
+     "idle-*" - a continuous ambient loop (breathing, scanning,
+                swinging, ticking...) so the whole stage feels alive,
+                not just a static illustration.
+--------------------------------------------------------- */
+function wrapAnim(inner, opts){
+  opts = opts || {};
+  const delay = opts.delay || 0;
+  const idle = opts.idle === undefined ? 'idle-bob' : opts.idle;
+  const idleDelay = delay + 0.55;
+  if(!idle){
+    return '<g class="enter" style="animation-delay:' + delay + 's">' + inner + '</g>';
+  }
+  return '<g class="enter" style="animation-delay:' + delay + 's"><g class="' + idle + '" style="animation-delay:' + idleDelay + 's">' + inner + '</g></g>';
+}
+
+function stick(x,y,scale,o){
+  o = Object.assign({
+    armL:[-14,10], armR:[14,10], legL:[-10,30], legR:[10,30],
+    color:'var(--ink)', head:true, delay:0, idle:'idle-bob'
+  }, o||{});
+  const c = o.color;
+  const body = (o.head? `<circle cx="0" cy="-34" r="9" fill="${c}" stroke="none"/>`:'') + `
+    <line x1="0" y1="-25" x2="0" y2="10"/>
+    <line x1="0" y1="-20" x2="${o.armL[0]}" y2="${o.armL[1]}"/>
+    <line x1="0" y1="-20" x2="${o.armR[0]}" y2="${o.armR[1]}"/>
+    <line x1="0" y1="10" x2="${o.legL[0]}" y2="${o.legL[1]}"/>
+    <line x1="0" y1="10" x2="${o.legR[0]}" y2="${o.legR[1]}"/>
+    ${o.extra||''}`;
+  return `<g transform="translate(${x},${y}) scale(${scale})" stroke="${c}" fill="none" stroke-width="4" stroke-linecap="round">${wrapAnim(body,{delay:o.delay, idle:o.idle})}</g>`;
+}
+function label(x,y,text,color,delay){
+  color = color || 'var(--muted)';
+  delay = delay || 0;
+  return `<g class="enter" style="animation-delay:${delay}s"><text x="${x}" y="${y}" fill="${color}" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle" letter-spacing="1">${text}</text></g>`;
+}
+function phoneIcon(x,y,s,dashed,color,o){
+  s = s || 1; color = color || 'var(--ink)'; o = o || {};
+  const delay = o.delay||0;
+  const idle = o.idle!==undefined ? o.idle : (dashed? 'idle-pulse' : null);
+  const body = `<rect x="-9" y="-16" width="18" height="32" rx="4" fill="none" stroke="${color}" stroke-width="3" stroke-dasharray="${dashed?'4 4':'0'}" class="${dashed?'idle-drift':''}"/>
+    <line x1="-9" y1="10" x2="9" y2="10" stroke="${color}" stroke-width="3"/>`;
+  return `<g transform="translate(${x},${y}) scale(${s})">${wrapAnim(body,{delay, idle})}</g>`;
+}
+function cctv(x,y,o){
+  o = o || {};
+  const delay = o.delay||0;
+  const body = `<rect x="-16" y="-6" width="26" height="14" rx="3"/>
+    <circle cx="14" cy="1" r="5" fill="var(--ink)" stroke="none" class="idle-blink"/>
+    <line x1="-16" y1="-6" x2="-24" y2="-16"/>`;
+  return `<g transform="translate(${x},${y})" stroke="var(--ink)" fill="none" stroke-width="3" stroke-linecap="round">${wrapAnim(body,{delay, idle:'idle-scan'})}</g>`;
+}
+function gavelProp(x,y,o){
+  o = o || {};
+  const delay = o.delay||0;
+  const body = `<line x1="0" y1="0" x2="22" y2="0"/><rect x="20" y="-8" width="16" height="16" rx="2" fill="var(--ink)" stroke="none"/>`;
+  return `<g transform="translate(${x},${y}) rotate(-25)" stroke="var(--ink)" stroke-width="4" stroke-linecap="round">${wrapAnim(body,{delay, idle:'idle-swing'})}</g>`;
+}
+function barsProp(x,y,w,h,o){
+  w = w||90; h = h||110; o = o || {};
+  const delay = o.delay||0;
+  let bars='';
+  for(let i=0;i<=6;i++){bars+=`<line x1="${x-w/2+i*w/6}" y1="${y-h/2}" x2="${x-w/2+i*w/6}" y2="${y+h/2}" stroke="var(--muted)" stroke-width="4"/>`;}
+  return wrapAnim(bars, {delay, idle:'idle-flicker'});
+}
+function clockProp(x,y,r,melt,o){
+  r = r||26; o = o || {};
+  const delay = o.delay||0;
+  const face = `<circle cx="0" cy="0" r="${r}" fill="none" stroke="var(--ink)" stroke-width="3" ${melt?'stroke-dasharray="3 4" class="idle-flicker"':''}/>
+    <line x1="0" y1="0" x2="${r-14}" y2="6" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/>`;
+  const hand = `<g class="idle-tick" style="animation-delay:${delay+0.6}s"><line x1="0" y1="0" x2="0" y2="${-r+8}" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/></g>`;
+  return `<g transform="translate(${x},${y})">${wrapAnim(face+hand,{delay, idle:null})}</g>`;
+}
+function chipHead(x,y,o){
+  o = o || {};
+  const delay = o.delay||0;
+  const body = `<rect x="-9" y="-9" width="18" height="18" rx="3"/>
+    <line x1="-9" y1="-4" x2="-14" y2="-4" class="idle-blink"/><line x1="-9" y1="4" x2="-14" y2="4" class="idle-blink-b"/>
+    <line x1="9" y1="-4" x2="14" y2="-4" class="idle-blink-b"/><line x1="9" y1="4" x2="14" y2="4" class="idle-blink"/>`;
+  return `<g transform="translate(${x},${y})" stroke="var(--ink)" stroke-width="2.5" fill="none">${wrapAnim(body,{delay, idle:null})}</g>`;
+}
+function scalesProp(x,y,o){
+  o = o || {};
+  const delay = o.delay||0;
+  const body = `<line x1="0" y1="-30" x2="0" y2="10"/>
+    <line x1="-32" y1="-18" x2="32" y2="-18"/>
+    <line x1="-32" y1="-18" x2="-32" y2="0"/><line x1="32" y1="-18" x2="32" y2="0"/>
+    <path d="M -44 0 A 14 10 0 0 0 -20 0 Z"/>
+    <path d="M 20 0 A 14 10 0 0 0 44 0 Z"/>`;
+  return `<g transform="translate(${x},${y})" stroke="var(--ink)" fill="none" stroke-width="3" stroke-linecap="round">${wrapAnim(body,{delay, idle:'idle-tilt'})}</g>`;
+}
+function doorShape(x,y,color,o){
+  color = color || 'var(--ink)'; o = o || {};
+  const delay = o.delay||0;
+  const body = `<rect x="-24" y="-52" width="48" height="104" rx="3" fill="none" stroke="${color}" stroke-width="3"/><circle cx="14" cy="0" r="2.5" fill="${color}"/>`;
+  return `<g transform="translate(${x},${y})">${wrapAnim(body,{delay, idle:'idle-swing-door'})}</g>`;
+}
+function bookStack(x,y,n,growing,o){
+  n = n||3; o = o || {};
+  const baseDelay = o.delay||0;
+  let s='';
+  for(let i=0;i<n;i++){
+    const w = growing? 40+i*22 : 60;
+    const d = baseDelay + i*0.12;
+    const originY = y - i*10 + 9;
+    s+=`<g class="grow-up" style="animation-delay:${d}s; transform-origin:${x}px ${originY}px;"><rect x="${x-w/2}" y="${y-i*10}" width="${w}" height="9" rx="2" fill="none" stroke="var(--ink)" stroke-width="2.5"/></g>`;
+  }
+  return s;
+}
+function chainBreak(x,y,o){
+  o = o || {};
+  const delay = o.delay||0;
+  const body = `<ellipse cx="-16" cy="0" rx="12" ry="8" transform="rotate(20 -16 0)"/>
+    <ellipse cx="16" cy="0" rx="12" ry="8" transform="rotate(-20 16 0)"/>`;
+  return `<g transform="translate(${x},${y})" stroke="var(--ink)" stroke-width="4" fill="none">${wrapAnim(body,{delay, idle:'idle-shake'})}</g>`;
+}
+function pillar(x,y,h,label_,delay){
+  delay = delay || 0;
+  const rect = `<g class="grow-up" style="animation-delay:${delay}s; transform-origin:${x}px ${y}px;">
+    <rect x="${x-14}" y="${y-h}" width="28" height="${h}" fill="none" stroke="var(--ink)" stroke-width="3"/>
+  </g>`;
+  if(label_.indexOf('|') !== -1){
+    const parts = label_.split('|');
+    const cap = `<g class="enter" style="animation-delay:${delay+0.55}s"><text x="${x}" y="${y+20}" fill="var(--ink)" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle" letter-spacing="0.5"><tspan x="${x}" dy="0">${parts[0]}</tspan><tspan x="${x}" dy="13">${parts[1]}</tspan></text></g>`;
+    return rect + cap;
+  }
+  return rect + label(x,y+18,label_,'var(--ink)', delay+0.55);
+}
+function sparkle(x,y,delay){
+  delay = delay || 0;
+  return `<circle cx="${x}" cy="${y}" r="2.4" fill="var(--ink)" class="idle-twinkle" style="animation-delay:${delay}s"/>`;
+}
+
+/* Little scene builders (compose the pieces above into full illustrations) */
+const scenes = {};
+
+scenes.title = `<svg viewBox="0 0 460 260">
+  ${phoneIcon(230,55,1.6,true)}
+  ${stick(90,190,1.05,{delay:.05})}
+  ${stick(180,195,0.95,{armL:[-10,8],armR:[16,-6],delay:.15})}
+  ${stick(280,192,1.0,{armL:[-16,4],armR:[16,4],delay:.25})}
+  ${stick(370,188,0.9,{delay:.35})}
+  ${label(230,242,'9:47 PM \u00b7 COLLEGE FEST',null,.6)}
+</svg>`;
+
+scenes.setup = `<svg viewBox="0 0 460 260">
+  ${phoneIcon(210,105,2,false,'var(--ink)',{delay:.15,idle:'idle-pulse'})}
+  ${stick(120,190,1.1,{armR:[24,-10]})}
+  ${label(120,241,'PRIYA',null,.4)}
+</svg>`;
+
+scenes.gone = `<svg viewBox="0 0 460 260">
+  ${phoneIcon(210,110,2,true,'var(--muted)')}
+  ${stick(120,190,1.1,{armL:[-20,-8],armR:[20,-8],idle:'idle-shock',delay:.15})}
+  ${label(120,241,'PRIYA \u2014 "WHERE IS IT?"',null,.5)}
+</svg>`;
+
+scenes.suspect = `<svg viewBox="0 0 460 260">
+  ${stick(230,185,1.3,{armL:[-8,26],armR:[8,26], legL:[-8,30],legR:[8,30], idle:'idle-bob-slow'})}
+  ${label(230,244,'RAJU \u00b7 CANTEEN WORKER',null,.4)}
+</svg>`;
+
+scenes.pillars = `<svg viewBox="0 0 460 260">
+  ${pillar(120,180,120,'BNS',.05)}
+  ${pillar(230,180,140,'BNSS',.2)}
+  ${pillar(340,180,120,'BSA',.35)}
+  <g class="grow-up" style="animation-delay:.55s; transform-origin:230px 56px;"><rect x="95" y="40" width="270" height="16" fill="none" stroke="var(--ink)" stroke-width="3"/></g>
+  ${label(230,30,'J U S T I C E','var(--ink)',.75)}
+</svg>`;
+
+scenes.stopHand = `<svg viewBox="0 0 460 260">
+  ${stick(150,190,1.15,{armR:[26,-16],color:'var(--ink)',delay:.05,idle:'idle-shock'})}
+  ${label(150,244,'OFFICER',null,.35)}
+  ${stick(300,190,1.15,{armL:[-10,20],armR:[10,20],delay:.2})}
+  ${label(300,244,'RAJU',null,.5)}
+</svg>`;
+
+scenes.doors = `<svg viewBox="0 0 460 260">
+  ${doorShape(150,110,'var(--ink)',{delay:.05})} ${label(150,195,'GUILTY WALKS FREE',null,.4)}
+  ${doorShape(310,110,'var(--ink)',{delay:.15})} ${label(310,195,'INNOCENT IS JAILED',null,.5)}
+  ${scalesProp(230,60,{delay:.3})}
+</svg>`;
+
+scenes.truthproof = `<svg viewBox="0 0 460 260">
+  <g class="enter" style="animation-delay:.05s"><ellipse cx="150" cy="90" rx="70" ry="42" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 5" class="idle-drift"/></g>
+  ${label(150,90,'TRUTH','var(--muted)',.3)}
+  <g class="enter" style="animation-delay:.2s"><g class="idle-pulse" style="animation-delay:.75s"><rect x="260" y="60" width="140" height="70" rx="6" fill="none" stroke="var(--ink)" stroke-width="3"/></g></g>
+  ${label(330,100,'PROOF','var(--ink)',.45)}
+  ${label(230,192,'WHAT COULD BE SHOWN IN COURT?',null,.6)}
+</svg>`;
+
+scenes.chainBreak = `<svg viewBox="0 0 460 260">
+  ${phoneIcon(140,100,1.6,false,'var(--ink)',{delay:.05})}
+  <g class="enter" style="animation-delay:.2s"><rect x="90" y="130" width="100" height="40" rx="4" fill="none" stroke="var(--ink)" stroke-width="3"/></g>
+  ${label(140,193,'SEAL BROKEN',null,.4)}
+  ${chainBreak(310,110,{delay:.3})}
+  ${label(310,150,'TRACKING BROKEN',null,.55)}
+</svg>`;
+
+scenes.growingBook = `<svg viewBox="0 0 460 260">
+  ${bookStack(160,190,4,true,{delay:.1})}
+  ${stick(340,185,1.1,{legL:[-8,20],legR:[-6,20],delay:.5,idle:'idle-shock'})}
+  ${label(340,122,'YOUR SPACE \u2193','var(--ink)',.75)}
+  ${label(160,222,'THE RULEBOOK \u2191','var(--ink)',.6)}
+</svg>`;
+
+scenes.digitalEvidence = `<svg viewBox="0 0 460 260">
+  ${cctv(120,60,{delay:.05})}
+  ${stick(230,190,1.15,{delay:.15})}
+  <g class="enter" style="animation-delay:.3s"><circle cx="230" cy="80" r="4" fill="var(--ink)" class="idle-blink"/></g>
+  <g class="enter" style="animation-delay:.35s"><line x1="230" y1="80" x2="230" y2="124" stroke="var(--ink)" stroke-width="2" stroke-dasharray="3 3" class="idle-drift"/></g>
+  ${label(230,244,'PHONE LOCATION \u00b7 CALL LOG',null,.55)}
+  ${chipHead(350,60,{delay:.2})}
+</svg>`;
+
+scenes.eyewitnessVsCam = `<svg viewBox="0 0 460 260">
+  ${stick(130,190,1.1,{armR:[20,-8],delay:.05})}
+  ${label(130,241,'3 EYEWITNESSES',null,.35)}
+  ${cctv(330,90,{delay:.2})}
+  ${label(330,150,'1 CAMERA',null,.5)}
+</svg>`;
+
+scenes.prison = `<svg viewBox="0 0 460 260">
+  ${barsProp(230,110,180,140,{delay:.05})}
+  ${stick(230,175,1.05,{delay:.3,idle:'idle-bob-slow'})}
+  ${label(230,232,'REVOLVING DOOR \u21bb','var(--ink)',.55)}
+</svg>`;
+
+scenes.delay = `<svg viewBox="0 0 460 260">
+  ${clockProp(180,100,50,true,{delay:.05})}
+  ${barsProp(340,110,80,120,{delay:.2})}
+  ${stick(340,175,0.9,{delay:.4,idle:'idle-bob-slow'})}
+  ${label(230,234,'SAID INNOCENT. STILL WAITING.',null,.6)}
+</svg>`;
+
+scenes.aiJudge = `<svg viewBox="0 0 460 260">
+  ${stick(150,190,1.1,{delay:.05})}
+  ${chipHead(60,55,{delay:.2})}
+  <g class="enter" style="animation-delay:.3s"><rect x="260" y="60" width="140" height="18" rx="9" fill="none" stroke="var(--ink)" stroke-width="3"/></g>
+  <g class="enter" style="animation-delay:.45s"><rect x="260" y="60" width="90" height="18" rx="9" fill="var(--ink)" opacity="0.55" class="fill-bar"/></g>
+  ${label(330,50,'RISK SCORE','var(--ink)',.6)}
+</svg>`;
+
+scenes.reveal = `<svg viewBox="0 0 460 260">
+  ${stick(120,185,1.05,{armR:[20,-6],delay:.05})}
+  ${label(120,244,"PRIYA'S FRIEND",null,.35)}
+  ${phoneIcon(120,100,1.4,false,'var(--ink)',{delay:.2,idle:'idle-pulse'})}
+  ${sparkle(95,80,.9)}${sparkle(148,72,1.1)}${sparkle(128,115,1.3)}
+  ${stick(300,190,1.05,{delay:.3})}
+  ${label(300,244,'RAJU',null,.55)}
+</svg>`;
+
+scenes.threeQ = `<svg viewBox="0 0 460 260">
+  ${pillar(85,180,110,'WHAT|HAPPENED?',.05)}
+  ${pillar(230,180,130,'HOW DOES THE|STATE MOVE?',.2)}
+  ${pillar(375,180,110,'CAN IT BE|PROVED?',.35)}
+</svg>`;
+
+scenes.blank = `<svg viewBox="0 0 460 260">${stick(230,190,1.3,{idle:'idle-bob-slow'})}</svg>`;
+
+
+
+/* ---------------------------------------------------------
+   SLIDE DATA
+--------------------------------------------------------- */
+const S = [];
+function slide(o){ S.push(o); }
+
+slide({tag:'', title:'9 Contrarian Notions on the Law of Crimes in India', sub:'', visual:'title',
+  notes:'Welcome the room. Tell them: tonight there is no legal jargon, no memorising sections. There is one phone, one accused, one story — and by the end of it, they will understand more about criminal law than most first-year law students. Build suspense: "By the time we\'re done, you will doubt something you currently believe about justice."',
+  activity:''});
+
+slide({tag:'SCENE 1', title:'9:47 PM. A college fest.', sub:'Priya puts her phone on the table. She goes to dance.', visual:'setup',
+  notes:'Paint the scene vividly — music, lights, a crowded table. This is the ONE story that carries the entire talk. Keep returning to it.', activity:''});
+
+slide({tag:'SCENE 2', title:'She comes back.', sub:'Her phone is gone. Someone must have taken it.', visual:'gone',
+  notes:'Pause here. Let the silence do the work. Ask: "Who took it?" Do not answer yet.', activity:''});
+
+slide({tag:'SCENE 3', title:'A suspect turns up.', sub:'Raju. He works at the canteen counter. Someone saw him nearby.', visual:'suspect',
+  notes:'Introduce Raju sympathetically — not as a criminal, but as a person who happened to be standing in the wrong place. Everything from here unfolds around this one fact pattern.', activity:''});
+
+slide({tag:'THE SETUP', title:'Three simple questions will decide what happens to Raju.', sub:'Not three laws to memorise. Just three questions.', visual:'threeQ',
+  notes:'Introduce BNS, BNSS, BSA — but frame them purely as three questions: What happened (BNS defines crime), How does the State respond (BNSS is the process), Can it be proved (BSA is the rules of evidence). Tell the audience: "Forget the names. Just remember the questions."',
+  activity:'Ask the audience to say the three questions back to you, in order, as a call-and-response.'});
+
+/* ---------- IDEA 1 ---------- */
+slide({tag:'NOTION 1', title:'Whose freedom is really on trial tonight?', sub:'', visual:'suspect',
+  notes:'Ask this and let it hang. Most people assume criminal law exists to punish Raju. Flip it: it exists, first, to restrain the people with power over Raju — the police.', activity:''});
+
+slide({tag:'NOTION 1 · BNSS Sec 47 & 48', title:'The law is a leash —', sub:'It holds back the police. Not Raju.', visual:'stopHand',
+  notes:'Explain: before police can arrest Raju, BNSS requires grounds of arrest to be told to him, a right to inform someone, production before a magistrate within 24 hours, and more. These rules don\'t punish Raju — they restrain what an officer can do to him. Most of the process law is a checklist on the State\'s own conduct, not on the citizen\'s.',
+  activity:'Stand if you think criminal law mainly exists to punish criminals. Stay seated if you think it mainly exists to control police power. Count both, then reveal the twist.'});
+
+slide({tag:'NOTION 1', title:'', sub:'', visual:'blank',
+  notes:'Transition beat — can skip in delivery or use as a breather with just the stick figure and silence for 3 seconds before the takeaway line appears verbally.',
+  takeaway:'Notion 1: The law isn\'t a leash on Raju. It\'s a leash on the police.'});
+
+/* ---------- IDEA 2 ---------- */
+slide({tag:'NOTION 2 · BSA Sec 104', title:'Which is worse?', sub:'Raju goes free, though guilty. Or Raju goes to jail, though innocent.', visual:'doors',
+  notes:'This is the Blackstone principle, though you never need to name it. It underlies presumption of innocence and the burden of proof resting on the prosecution.', activity:''});
+
+slide({tag:'NOTION 2 · POLL', title:'Pick a door.', sub:'', visual:'doors',
+  notes:'Run this as a genuine audience vote — raise hands for each door. Reveal that legal systems worldwide are built to prefer the second door being empty, even at the cost of some guilty people walking.',
+  activity:'Live vote: raise your hand for Door 1 (guilty man goes free) or Door 2 (innocent man goes to jail) — whichever feels worse to you. Tally and discuss the split.'});
+
+slide({tag:'NOTION 2', title:'', sub:'', visual:'blank', notes:'Pause beat.',
+  takeaway:'Notion 2: The law would rather let a guilty man go free than send an innocent man to jail.'});
+
+/* ---------- IDEA 3 ---------- */
+slide({tag:'NOTION 3', title:'Did anyone actually see Raju take the phone?', sub:'', visual:'suspect',
+  notes:'Set up the gap between what happened and what can be shown to have happened.', activity:''});
+
+slide({tag:'NOTION 3 · BSA Sec 3', title:'Courts don\'t decide the truth.', sub:'They decide what can be proved.', visual:'truthproof',
+  notes:'Explain BSA (Bharatiya Sakshya Adhiniyam) as the rulebook for evidence — what facts are relevant, what is admissible, and the standard of proof beyond reasonable doubt. Truth may exist quietly in the world; the court can only act on what survives these filters.',
+  activity:'Show four "facts" about the case out loud (a rumor, a text message, a signed statement, a stranger\'s gossip). Ask the audience to vote, fact by fact: real evidence, or just noise?'});
+
+slide({tag:'NOTION 3', title:'', sub:'', visual:'blank', notes:'Pause beat.',
+  takeaway:'Notion 3: Courts don\'t look for the truth. They look for proof.'});
+
+/* ---------- IDEA 4 ---------- */
+slide({tag:'NOTION 4', title:'What if Raju is guilty —', sub:'but the police broke the rules while catching him?', visual:'chainBreak',
+  notes:'Introduce the idea that procedure can outweigh substance. An illegal search, a coerced confession, a broken chain of custody on the phone — any of these can sink a case regardless of what BNS says the crime is.', activity:''});
+
+slide({tag:'NOTION 4 · BNSS Sec 105', title:'A clear, simple crime', sub:'can still fall apart if the police break the rules.', visual:'chainBreak',
+  notes:'This is the punchline of the whole BNSS-heavy structure of Indian criminal procedure: in practice, most cases are won or lost on procedure — was the search legal, was the seizure witnessed, was the statement voluntary — far more often than on the wording of the offence itself.',
+  activity:'Pick two volunteers. One plays "police," one plays "defence lawyer." Give them 30 seconds to improvise an argument over a broken evidence-bag seal on Raju\'s recovered phone.'});
+
+slide({tag:'NOTION 4', title:'', sub:'', visual:'blank', notes:'Pause beat.',
+  takeaway:'Notion 4: The rules aren\'t just paperwork. Sometimes, the rules ARE the case.'});
+
+/* ---------- IDEA 5 ---------- */
+slide({tag:'NOTION 5', title:'What if we made this a crime:', sub:'"Standing too close to someone else\'s phone"', visual:'growingBook',
+  notes:'Every time a legislature adds a new offence, it also adds a new reason for the State to stop, search, question, or arrest an ordinary citizen. More crimes on the books quietly means more contact points between citizens and police.', activity:''});
+
+slide({tag:'NOTION 5 · BNS', title:'Every new crime', sub:'is a new door the police can knock on.', visual:'growingBook',
+  notes:'Ask the audience to imagine a world where standing near someone\'s bag for 10 seconds is criminalised. Suddenly Raju — and everyone in this room — is a suspect just by existing near other people\'s belongings. This is the quiet cost of over-criminalisation.',
+  activity:'Ask the audience to shout out one imaginary "new crime," half-jokingly. Pick one and workshop, out loud, exactly how much new police power it would create over ordinary people.'});
+
+slide({tag:'NOTION 5', title:'', sub:'', visual:'blank', notes:'Pause beat.',
+  takeaway:'Notion 5: Every new crime is a new door the police can knock on.'});
+
+/* ---------- IDEA 6 ---------- */
+slide({tag:'NOTION 6', title:'Forget witnesses.', sub:'What do Raju\'s phone location, tower signal, and the CCTV camera say?', visual:'digitalEvidence',
+  notes:'Modern criminal evidence increasingly rests on digital trails rather than fallible human memory. BSA modernised the rules for admitting electronic and digital records as evidence.', activity:''});
+
+slide({tag:'NOTION 6 · BSA Sec 63', title:'The most honest witness', sub:'in this case may be a camera.', visual:'eyewitnessVsCam',
+  notes:'Eyewitness memory is notoriously unreliable — stress, lighting, time all distort it. A CCTV timestamp doesn\'t forget, doesn\'t get scared, doesn\'t change its story. BSA\'s digital evidence provisions are quietly becoming the backbone of modern trials.',
+  activity:'Vote: would you trust 3 confident eyewitnesses more, or 1 grainy CCTV clip? Raise hands for each, then discuss why memory fails and footage (mostly) doesn\'t.'});
+
+slide({tag:'NOTION 6', title:'', sub:'', visual:'blank', notes:'Pause beat.',
+  takeaway:'Notion 6: The most honest witness here may be a camera, not a person.'});
+
+/* ---------- IDEA 7 ---------- */
+slide({tag:'NOTION 7', title:'Say Raju is found guilty.', sub:'What happens to him in year two of his sentence?', visual:'prison',
+  notes:'Shift focus from trial to punishment. Overcrowded prisons, little rehabilitation, heavy social stigma on release — the conditions that often produce repeat offenders rather than reformed citizens.', activity:''});
+
+slide({tag:'NOTION 7', title:'We built prisons to end crime.', sub:'Too often, we built a school for it instead.', visual:'prison',
+  notes:'Discuss the revolving door of recidivism, and mention that modern procedure increasingly looks toward alternatives — probation, community service, restorative approaches — precisely because pure incarceration so often fails to reform.',
+  activity:'Ask the room to vote: does a prison sentence mostly reform people, or mostly harden them? A show of hands, then a 60-second open debate between two volunteers.'});
+
+slide({tag:'NOTION 7', title:'', sub:'', visual:'blank', notes:'Pause beat.',
+  takeaway:'Notion 7: We built prisons to end crime. Too often, we built a school for it instead.'});
+
+/* ---------- IDEA 8 ---------- */
+slide({tag:'NOTION 8', title:'The law says Raju is innocent.', sub:'So why has he already waited three years for his trial?', visual:'delay',
+  notes:'Undertrial detention is one of the quietest injustices in any criminal justice system — years spent in custody before guilt or innocence is even decided.', activity:''});
+
+slide({tag:'NOTION 8 · BNSS Sec 479', title:'For someone waiting on trial,', sub:'the punishment can start before the verdict.', visual:'delay',
+  notes:'Talk about bail provisions, court backlogs, and how "justice delayed is justice denied" is not a slogan but a lived reality for undertrial prisoners — some of whom spend longer awaiting trial than the maximum sentence for their alleged offence.',
+  activity:'Sit in complete silence for 15 seconds and just watch a clock. Afterwards say: "That felt long. Now imagine three years — not knowing the outcome."'});
+
+slide({tag:'NOTION 8', title:'', sub:'', visual:'blank', notes:'Pause beat.',
+  takeaway:'Notion 8: For someone waiting on trial, the punishment can start before the verdict.'});
+
+/* ---------- IDEA 9 ---------- */
+slide({tag:'NOTION 9', title:'What if a computer had flagged Raju', sub:'before the phone even went missing?', visual:'aiJudge',
+  notes:'Introduce predictive policing, facial recognition, and AI-assisted evidence analysis — and the real risk of bias baked into these systems.', activity:''});
+
+slide({tag:'NOTION 9 · THE FUTURE', title:'Tomorrow\'s courtroom', sub:'may need fewer new laws — and much smarter computer programs.', visual:'aiJudge',
+  notes:'Technology is outpacing the speed at which BNS, BNSS and BSA can be rewritten. The next great debates in criminal justice may be less about defining new offences, and more about how much we trust a machine\'s judgment over a human\'s.',
+  activity:'60-second debate: split the room in half. One half argues "a computer judge would be fairer." The other half argues "never trust a computer with someone\'s freedom." Call on one voice from each side.'});
+
+slide({tag:'NOTION 9', title:'', sub:'', visual:'blank', notes:'Pause beat.',
+  takeaway:'Notion 9: Tomorrow\'s courtroom may need fewer new laws, and much smarter computer programs.'});
+
+/* ---------- CLOSING ---------- */
+slide({tag:'THE REVEAL', title:'So who really took the phone?', sub:'', visual:'suspect',
+  notes:'Big suspense beat. Ask the room to guess, one more time, out loud.', activity:''});
+
+slide({tag:'THE REVEAL', title:'No one.', sub:'Priya\'s friend picked it up by mistake, in the dark, at the same table.', visual:'reveal',
+  notes:'This is the gut-punch. There was no crime at all. And yet — in our story — Raju could have been stopped, searched, arrested, tried for years, evidenced against by cameras and data, jailed, and failed by a slow system... over nothing.',
+  activity:''});
+
+slide({tag:'THE WEIGHT OF IT', title:'All nine ideas moved into action —', sub:'for a phone that was never even stolen.', visual:'threeQ',
+  notes:'Walk back through all nine ideas in 60 seconds, showing how each one applied to Raju even though he did nothing wrong. This is why restraining the State (idea 1) and protecting the innocent (idea 2) matter more than punishing the guilty.',
+  activity:''});
+
+slide({tag:'REMEMBER THIS', title:'Three questions.', sub:'What is the crime? How does justice move? How do we know what\'s true?', visual:'threeQ',
+  notes:'Recap: BNS = What is the crime. BNSS = How does justice move. BSA = How do we know the truth. Ask the audience to say all three back to you one final time.',
+  activity:'Call and response, one last time: "BNS?" — "What is the crime!" "BNSS?" — "How does justice move!" "BSA?" — "How do we know what\'s true!"'});
+
+slide({tag:'ONE MORE THING', title:'Is criminal law about punishing criminals?', sub:'Or about protecting all of us — including the person accused?', visual:'blank',
+  notes:'The final, Steve-Jobs-style "one more thing" beat. Deliver slowly. Let the question sit, unanswered, as the lights come up.',
+  activity:''});
+
+/* ---------------------------------------------------------
+   RENDER + NAV
+--------------------------------------------------------- */
+const deck = document.getElementById('deck');
+
+S.forEach((sdata, i)=>{
+  const el = document.createElement('div');
+  el.className='slide';
+  el.id='s'+i;
+
+  let inner = '';
+  if(sdata.tag){
+    inner += `<div class="eyebrow"><span class="dot"></span>${sdata.tag}</div>`;
+  }
+  if(sdata.title){
+    inner += `<h1 class="title">${sdata.title}</h1>`;
+  }
+  if(sdata.sub){
+    inner += `<p class="sub">${sdata.sub}</p>`;
+  }
+  if(sdata.visual){
+    inner += `<div class="scene">${scenes[sdata.visual]||''}</div>`;
+  }
+  if(sdata.takeaway){
+    inner += `<p class="takeaway">${sdata.takeaway}</p>`;
+  }
+  el.innerHTML = inner;
+  deck.appendChild(el);
+});
+
+let idx = 0;
+function render(){
+  document.querySelectorAll('.slide').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+idx).classList.add('active');
+  document.getElementById('counter').textContent = String(idx+1).padStart(2,'0') + ' / ' + String(S.length).padStart(2,'0');
+  document.getElementById('progressBar').style.width = ((idx+1)/S.length*100)+'%';
+}
+
+/* ---------------------------------------------------------
+   REMOTE CONTROL SYNC
+   This deck no longer advances itself. Every next()/prev()
+   just asks the server to change the room's slide index; the
+   server broadcasts the new index back to this page (and to
+   any connected remote-control pages), and only THEN do we
+   render. That keeps every open viewer/remote in lock-step,
+   whether the move was triggered here, by a remote, or by a
+   second copy of this page open elsewhere.
+--------------------------------------------------------- */
+const ROOM = new URLSearchParams(location.search).get('room') || 'main';
+let ws;
+let wsReady = false;
+
+function connectWS(){
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  ws = new WebSocket(proto + '//' + location.host + '/ws?room=' + encodeURIComponent(ROOM));
+  ws.onopen = () => {
+    wsReady = true;
+    ws.send(JSON.stringify({type:'total', total:S.length}));
+  };
+  ws.onmessage = (ev) => {
+    let msg;
+    try{ msg = JSON.parse(ev.data); }catch(e){ return; }
+    if(msg.type === 'state' && typeof msg.idx === 'number'){
+      idx = Math.min(Math.max(msg.idx,0), S.length-1);
+      render();
+    }
+  };
+  ws.onclose = () => {
+    wsReady = false;
+    setTimeout(connectWS, 1500); // auto-reconnect if the connection drops
+  };
+  ws.onerror = () => { ws.close(); };
+}
+connectWS();
+
+function send(type){ if(wsReady) ws.send(JSON.stringify({type})); }
+function next(){ send('next'); }
+function prev(){ send('prev'); }
+
+document.getElementById('nextBtn').addEventListener('click', next);
+document.getElementById('prevBtn').addEventListener('click', prev);
+deck.addEventListener('click', (e)=>{
+  if(swipeHandled){ swipeHandled=false; return; }
+  const w = window.innerWidth;
+  if(e.clientX > w/2) next(); else prev();
+});
+
+/* Swipe support for phones, tablets, and touch-enabled smart boards */
+let touchStartX=0, touchStartY=0, touchStartTime=0, swipeHandled=false;
+deck.addEventListener('touchstart', (e)=>{
+  const t = e.changedTouches[0];
+  touchStartX = t.clientX; touchStartY = t.clientY; touchStartTime = Date.now();
+  swipeHandled = false;
+}, {passive:true});
+deck.addEventListener('touchend', (e)=>{
+  const t = e.changedTouches[0];
+  const dx = t.clientX - touchStartX;
+  const dy = t.clientY - touchStartY;
+  const dt = Date.now() - touchStartTime;
+  if(Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.4 && dt < 600){
+    swipeHandled = true;
+    if(dx < 0){ next(); } else { prev(); }
+  }
+}, {passive:true});
+
+document.addEventListener('keydown', (e)=>{
+  if(e.key==='ArrowRight' || e.key===' ') { e.preventDefault(); next(); }
+  if(e.key==='ArrowLeft') prev();
+  if(e.key.toLowerCase()==='f') toggleFullscreen();
+});
+
+/* Fullscreen toggle — handy for projectors and interactive smart boards */
+function toggleFullscreen(){
+  const el = document.documentElement;
+  if(!document.fullscreenElement){
+    (el.requestFullscreen && el.requestFullscreen().catch(()=>{})) ||
+    (el.webkitRequestFullscreen && el.webkitRequestFullscreen());
+  } else {
+    (document.exitFullscreen && document.exitFullscreen()) ||
+    (document.webkitExitFullscreen && document.webkitExitFullscreen());
+  }
+}
+const fsBtnEl = document.getElementById('fsBtn');
+if(fsBtnEl){ fsBtnEl.addEventListener('click', toggleFullscreen); }
+/* Hide the fullscreen button on iOS Safari, which does not support the Fullscreen API on non-video elements */
+(function(){
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  if(isIOS && fsBtnEl){ fsBtnEl.style.display='none'; }
+})();
+
+render();
+</script>
+</body>
+</html>
